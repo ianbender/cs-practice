@@ -18,20 +18,20 @@ class Heap:
         self.list = [None] * self.capacity
 
 
-    def __get_left_child_index(parent_index): return 2 * parent_index + 1
-    def __get_right_child_index(parent_index): return 2 * parent_index + 2
-    def __get_parent_index(child_index): return (child_index - 1) / 2
+    def get_left_child_index(self, parent_index): return 2 * parent_index + 1
+    def get_right_child_index(self, parent_index): return 2 * parent_index + 2
+    def get_parent_index(self, child_index): return int((child_index - 1) / 2)
 
-    def __has_left_child(index): return self.__get_left_child_index(index) < size
-    def __has_right_child(index): return self.__get_right_child_index(index) < size
-    def __has_parent(index): return self.__get_parent_index(index) >= 0
+    def has_left_child(self, index): return self.get_left_child_index(index) < self.size
+    def has_right_child(self, index): return self.get_right_child_index(index) < self.size
+    def has_parent(self, index): return self.get_parent_index(index) >= 0
 
-    def __left_child(index): return self.list[self.__get_left_child_index(index)]
-    def __right_child(index): return self.list[self.__get_right_child_index(index)]
-    def __parent(index): return self.list[self.__get_parent_index(index)]
+    def left_child(self, index): return self.list[self.get_left_child_index(index)]
+    def right_child(self, index): return self.list[self.get_right_child_index(index)]
+    def parent(self, index): return self.list[self.get_parent_index(index)]
 
 
-    def swap(first_index, second_index):
+    def swap(self, first_index, second_index):
         temp = self.list[first_index]
         self.list[first_index] = self.list[second_index]
         self.list[second_index] = temp
@@ -45,14 +45,15 @@ class Heap:
 
 
     def peek(self):
-        if size == 0: raise Exception('Heap is empty')
+        if self.size == 0: raise Exception('Heap is empty')
         return self.list[0] if self.size > 0 else None
 
 
-    def remove(self):
-        if size == 0: raise Exception('Heap is empty')
+    def pluck(self):
+        if self.size == 0: raise Exception('Heap is empty')
         item = self.list[0]
-        self.list[0] = self.list[size - 1]
+        self.list[0] = self.list[self.size - 1]
+        self.list[self.size - 1] = None
         self.size -= 1
         self.heap_down()
         return item
@@ -60,17 +61,30 @@ class Heap:
 
     def add(self, item):
        self.check_capacity()
-       self.list[size] = item
+       self.list[self.size] = item
        self.size += 1
        self.heap_up()
 
 
-    def heap_up():
-        pass
+    def heap_up(self):
+        index = self.size - 1
+        while self.has_parent(index) and self.parent(index) > self.list[index]:
+            self.swap(self.get_parent_index(index), index)
+            index = self.get_parent_index(index)
 
 
-    def heap_down():
-        pass
+    def heap_down(self):
+        index = 0
+        while self.has_left_child(index):
+            smaller_index = self.get_left_child_index(index)
+            if self.has_right_child(index) and (self.right_child(index) < self.left_child(index)):
+                smaller_index = self.get_right_child_index(index)
+
+            if self.list[index] < self.list[smaller_index]:
+                break
+
+            self.swap(index, smaller_index)
+            index = smaller_index
 
 
     def __repr__(self):
