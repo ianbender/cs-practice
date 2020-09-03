@@ -1,6 +1,8 @@
-'''
+"""
 Practice implementing Linked Lists
-'''
+"""
+
+
 class Node:
     def __init__(self, data):
         self.data = data
@@ -12,7 +14,6 @@ class LinkedList:
     def __init__(self):
         self.head = None
 
-
     def append(self, data):
         if self.head is None:
             self.head = Node(data)
@@ -23,7 +24,6 @@ class LinkedList:
             current = current.next
         current.next = Node(data)
 
-
     def prepend(self, data):
         if self.head is None:
             self.head = Node(data)
@@ -32,7 +32,6 @@ class LinkedList:
         current = Node(data)
         current.next = self.head
         self.head = current
-
 
     def delete(self, data):
         if self.head is None: return
@@ -47,7 +46,6 @@ class LinkedList:
                 return
             current = current.next
 
-
     # Display in the REPL the same as a Python list
     def __repr__(self):
         if self.head is None: return "[]"
@@ -60,3 +58,13 @@ class LinkedList:
             if current is None: break
 
         return f"[{','.join(map(str, data))}]"
+
+
+if __name__ == '__main__':
+    ll = LinkedList()
+    ll.append(5)
+    ll.prepend(3)
+    print(ll)
+    ll.delete(3)
+    ll.delete(5)
+    print(ll)
